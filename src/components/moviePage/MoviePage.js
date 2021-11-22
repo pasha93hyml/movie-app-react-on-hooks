@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import Spinner from "../spinner/Spinner";
+import ErrorMessage from "../errorMessage/ErrorMessage";
 
 import MovieService from "../../service/MovieService";
 
@@ -29,6 +30,7 @@ const MoviePage = ({ baseURL, movieID }) => {
   }
 
   const onMovieLoaded = (data) => {
+    document.title = data.title
       console.log(data);
     setLoading(false);
     setItemData(data);
@@ -43,27 +45,29 @@ const MoviePage = ({ baseURL, movieID }) => {
     return (
       <>
         <div className="title">
-          <div className="title_wrapper">
+          <div className="title_wrapper title-grid">
             <h3>{data.title}</h3>
-            <p>{data.original_title}</p>
+            <span>{data.original_title}</span>
           </div>
         </div>
         <div className="poster">
           <img
             src={
-              baseURL
+              data.poster_path
                 ? baseURL + data.poster_path
                 : "https://cdn.browshot.com/static/images/not-found.png"
             }
             alt={data.title}
           />
-          <div className="rate">Популярность фильма: {data.popularity}</div>
         </div>
         <div className="player">Тут мог бы быть плеер</div>
         <div className="details">
-          {data.overview.length ? data.overview : "Нет описания данного фильма"}
+          <div className="details-inner">
+            {data.overview.length ? data.overview : "Нет описания данного фильма"}
+          </div>
         </div>
         <div className="description">
+          <div className="rate">Популярность фильма: {data.popularity}</div>
           <div className="sub_grid">
             <div className="sub_title">Год</div>
             <div className="sub_descr">{data.release_date}</div>
@@ -98,11 +102,13 @@ const MoviePage = ({ baseURL, movieID }) => {
       gridTemplateRows: '1fr'
   } : null
   const spinner = loading ? <Spinner /> : null;
-  const content = (!loading && itemData) ? renderItem(itemData) : null;
+  const errorMessage = error ? <ErrorMessage/> : null;
+  const content = (!loading && !error && itemData) ? renderItem(itemData) : null;
 
   return (
     <div className="movie" style={style}>
       {spinner}
+      {errorMessage}
       {content}
     </div>
   );

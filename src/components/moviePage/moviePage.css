@@ -1,4 +1,6 @@
 .movie {
+    /* max-width: 1400px; */
+    padding-top: 30px;
     background-color: #fff;
     display: grid;
     grid-gap: 5px;
@@ -8,7 +10,7 @@
         ". poster player ."
         ". poster player ."
         ". poster player ."
-        ". poster player."
+        ". descr details."
         ". descr details ."
         ". descr  details ."
 
@@ -22,16 +24,28 @@
 .title_wrapper {
     padding-top: 10%;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+}
+
+.title-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
 }
 
 .player {
     text-align: center;
     align-self: center;
     grid-area: player;
-    max-width: auto;
+    width: 640px;
+    height: 360px;
+    background-color: #000;
+    margin-left: 14%;
+    color:#fff;
+
+
 }
 
 .poster {
@@ -48,8 +62,12 @@
 }
 
 .details {
-
+    padding-left: 14%;
     grid-area: details;
+}
+
+.details-inner {
+    max-width: 620px;
 }
 
 .description {
@@ -57,7 +75,26 @@
 }
 
 .sub_grid {
+    padding-top: 30px;
+    background-color: rgba(136, 133, 133, 0.212);
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-template-rows: repeat(4, 1fr);
+    grid-gap: 1em;
+    padding: 5%;
+}
+
+.sub_title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sub_descr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.rate {
+    margin: 20px 0 20px 0;
+    font-weight: 700;
 }

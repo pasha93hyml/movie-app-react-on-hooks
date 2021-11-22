@@ -34,15 +34,8 @@ const App = () => {
     setQuery('')
   }
 
-  const onHomeBtn = () => {
-    setSelectedGenreID(null)
-    setQuery('')
-    setMovieID(null)
-  }
-
   const onInputChange = (value) => {
     setQuery(value)
-    setSelectedGenreID(null)
   }
 
   return (
@@ -52,7 +45,6 @@ const App = () => {
         <NavBar 
           onGenreSelect={onGenreSelect}
           onInputChange={onInputChange}
-          onHomeBtn={onHomeBtn}
         />
       </ErrorBoundary>
       <Switch>

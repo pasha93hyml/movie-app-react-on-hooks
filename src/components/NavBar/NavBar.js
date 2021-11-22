@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import MovieService from "../../service/MovieService";
 import "./NavBar.css";
 
-const NavBar = ({onGenreSelect, onInputChange, onHomeBtn}) => {
+const NavBar = ({onGenreSelect, onInputChange}) => {
 
   const [genres, setGernres] = useState([])
   const [dropMenu, setDropMenu] = useState(false)
@@ -24,6 +24,7 @@ const NavBar = ({onGenreSelect, onInputChange, onHomeBtn}) => {
       <li key={i} onClick={() => {
         onGenreSelect(item.id)
         toggleDropMenu()
+        document.title = item.name[0].toUpperCase() + item.name.slice(1)
         }}>
         <Link to={`/genre/${item.id}`} className="dropdown-item">
           {item.name}
@@ -44,9 +45,7 @@ const NavBar = ({onGenreSelect, onInputChange, onHomeBtn}) => {
         <Link to="/"
                 className="btn btn-secondary mr-3"
                 type="button"
-                onClick={() => {
-                  onHomeBtn()
-                }}
+                onClick={() => document.title = 'Home Page'}
               >
                 Home page
               </Link>

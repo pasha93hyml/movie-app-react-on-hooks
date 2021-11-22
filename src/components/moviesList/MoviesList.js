@@ -1,6 +1,8 @@
 import {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom';
 
+import Spinner from '../spinner/Spinner'
+
 import MovieService from '../../service/MovieService';
 
 import "./MoviesList.css";
@@ -24,7 +26,7 @@ const MoviesList = ({onMovieSelect, selectedGenreID, query, baseURL}) => {
 
     // рендеринг популярних фільмів
     onRequest()
-    console.log('mount');
+    // console.log('mount');
   }, [])
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const MoviesList = ({onMovieSelect, selectedGenreID, query, baseURL}) => {
   const renderItems = (items) => {
     return items.map((item, i) => {
       return (
-        <div key={i} className="col">
+        <div key={i}>
           <Link to={`/${item.id}`} className="card" 
           onClick={() => {
             onMovieSelect(item.id)
@@ -107,19 +109,23 @@ const MoviesList = ({onMovieSelect, selectedGenreID, query, baseURL}) => {
       );
     });
   };
-
-    const content = renderItems(moviesData);
+    const spinner = loading ? <Spinner/> : null;
+    const content = !loading ? renderItems(moviesData) : null;
+    const classes = moviesData.length && moviesData.length < 5 ? `row row-cols-1 row-cols-md-${moviesData.length} g-4` : 'row row-cols-1 row-cols-md-5 g-4'
+    const display = (!moviesData.length || moviesData.length < 5) ? {display:'none'} : null
     return (
       <>
         <div className="bg-light pt-3">
         <div className="container">
-          <div className="row row-cols-1 row-cols-md-5 g-4">
+          <div className={classes}>
+            {spinner}
             {content}
             <button
               className="btn btn-secondary d-block mx-auto mb-3"
               type="button"
               disabled={newItemLoading}
               onClick={onRequest}
+              style={display}
             >
               Load more
             </button>

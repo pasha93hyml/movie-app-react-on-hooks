@@ -27,14 +27,12 @@
 
 }
 
-.col:hover {
-    cursor: pointer;
-    box-shadow: 0 20px 20px 0 rgb(121, 34, 34);
-}
 
-.card-img-top:hover {
-    transform: scale(1.2);
+.card:hover {
+    transform: scale(1.05);
     transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    box-shadow: 1px 6px 10px 0 rgb(189, 93, 30);
 }
 
 .item__name {
