@@ -3,26 +3,25 @@ import { Link } from "react-router-dom";
 import MovieService from "../../service/MovieService";
 import "./NavBar.css";
 
-const NavBar = ({onGenreSelect, onInputChange}) => {
+const NavBar = () => {
 
   const [genres, setGernres] = useState([])
   const [dropMenu, setDropMenu] = useState(false)
   const [query, setQuery] = useState('')
 
   useEffect(() => {
-    movieService.getGenres().then(data => setGernres(data))
+    getGenres().then(data => setGernres(data))
   }, [])
 
-  const movieService = new MovieService();
+  const {getGenres} = MovieService();
 
   const toggleDropMenu = () => {
     setDropMenu(!dropMenu)
   }
 
   const renderItems = (items) => {
-    return items.map((item, i) => (
-      <li key={i} onClick={() => {
-        onGenreSelect(item.id)
+    return items.map(item => (
+      <li key={item.id} onClick={() => {
         toggleDropMenu()
         document.title = item.name[0].toUpperCase() + item.name.slice(1)
         }}>
@@ -45,7 +44,7 @@ const NavBar = ({onGenreSelect, onInputChange}) => {
         <Link to="/"
                 className="btn btn-secondary mr-3"
                 type="button"
-                onClick={() => document.title = 'Home Page'}
+                onClick={() => document.title = 'Movies App'}
               >
                 Home page
               </Link>
@@ -73,10 +72,9 @@ const NavBar = ({onGenreSelect, onInputChange}) => {
                 name="search"
                 value={query}
               />
-              <Link to={`/search=${query}`}>
+              <Link to={`/search/${query}`}>
                 <button 
                   onClick={() => {
-                    onInputChange(query)
                     setQuery('')
                   }} 
                   type="submit">

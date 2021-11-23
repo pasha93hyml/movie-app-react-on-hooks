@@ -1,61 +1,59 @@
-class MovieService  {
-    _apiBase = 'https://api.themoviedb.org/3/'
-    _apiKey = 'api_key=e352cfad536dcafc2d9540798bc763ce';
+import {useHttp} from '../hooks/http.hook'
 
-    
-    getResource = async (url) => {
-        let res = await fetch(url);
+const useMovieService = () =>  {
+    const {loading, request, error, clearError} = useHttp();
 
-        if(!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`)
-        }
+    const _apiBase = 'https://api.themoviedb.org/3/'
+    const _apiKey = 'api_key=e352cfad536dcafc2d9540798bc763ce';
 
-        return await res.json();
-    }
-
-    getConfiguration = async () => {
-        const res = await this.getResource(`${this._apiBase}configuration?${this._apiKey}`)
+    const getConfiguration = async () => {
+        const res = await request(`${_apiBase}configuration?${_apiKey}`)
         return res.images
     }
 
-    getTopRatedMovies = async () => {
-        const res = await this.getResource(`${this._apiBase}movie/top_rated?${this._apiKey}&language=ru-RU&page=10`)
-        return res.results.map(this.modifiedItem)
+    const getTopRatedMovies = async () => {
+        const res = await request(`${_apiBase}movie/top_rated?${_apiKey}&language=ru-RU&page=10`)
+        return res.results.map(modifiedItem)
     }
     
-    getPopularMovies = async (page = 1) => {
-        const requesturl = `${this._apiBase}movie/popular?${this._apiKey}&language=ru-RU&page=${page}`
-        const res = await this.getResource(requesturl)
+    const getPopularMovies = async (page = 1) => {
+        const requesturl = `${_apiBase}movie/popular?${_apiKey}&language=ru-RU&page=${page}`
+        const res = await request(requesturl)
 
-        return res.results.map(this.modifiedItem)
+        return res.results.map(modifiedItem)
     }
 
-    getGenres = async () => {
-        const res = await this.getResource(`${this._apiBase}genre/movie/list?${this._apiKey}&language=ru-RU`)
+    const getGenres = async () => {
+        const res = await request(`${_apiBase}genre/movie/list?${_apiKey}&language=ru-RU`)
 
         return res.genres;
     }
 
 
-    getMoviesByGenre = async (page = 1, id) => {
-        const requestUrl = `${this._apiBase}discover/movie?${this._apiKey}&language=ru-RU&sort_by=popularity.desc&include_adult=false&include_video=false{true}&page=${page}&primary_release_date.gte=1990-01-01&primary_release_date.lte=1999-12-31&vote_average.gte=6&with_genres=${id}`
-        const res = await this.getResource(requestUrl)
+    const getMoviesByGenre = async (page = 1, id) => {
+        const requestUrl = `${_apiBase}discover/movie?${_apiKey}&language=ru-RU&sort_by=popularity.desc&include_adult=false&include_video=false{true}&page=${page}&primary_release_date.gte=1990-01-01&primary_release_date.lte=1999-12-31&vote_average.gte=6&with_genres=${id}`
+        const res = await request(requestUrl)
         return res.results;
     }
 
-    getSearchResults = async (page = 1, query) => {
-        const res = await this.getResource(`${this._apiBase}search/movie?${this._apiKey}&language=ru-RU&page=${page}&query=${query}`)
-        return res.results.map(this.modifiedItem);
+    const getSearchResults = async (page = 1, query) => {
+        const res = await request(`${_apiBase}search/movie?${_apiKey}&language=ru-RU&page=${page}&query=${query}`)
+        return res.results.map(modifiedItem);
     }
 
-    getDetails = async (id) => {
-        const responseUrl = `${this._apiBase}movie/${id}?${this._apiKey}&language=ru-RU`
-        const res = await this.getResource(responseUrl)
-        console.log(res);
-        return this.modifyMovieItem(res);
+    const getDetails = async (id) => {
+        const responseUrl = `${_apiBase}movie/${id}?${_apiKey}&language=ru-RU`
+        const res = await request(responseUrl)
+        return modifyMovieItem(res);
     }
 
-    modifiedItem = (item) => {
+    const getRecommendations = async (id) => {
+        const responseUrl = `${_apiBase}movie/${id}/recommendations?${_apiKey}&language=ru-RU&page=1`
+        const res = await request(responseUrl)
+        return res.results.map(modifiedItem);
+    }
+
+    const modifiedItem = (item) => {
         return {
             id: item.id,
             title: item.title,
@@ -65,7 +63,7 @@ class MovieService  {
         }
     }
 
-    modifyMovieItem = (item) => ({
+    const modifyMovieItem = (item) => ({
         poster_path: item.poster_path,
         genres: [...item.genres.map(genre => genre.name)],
         overview: item.overview,
@@ -79,8 +77,9 @@ class MovieService  {
         original_title: item.original_title
     })
     
+    return {loading, error, clearError, getConfiguration, getTopRatedMovies, getPopularMovies, getGenres, getMoviesByGenre, getSearchResults, getDetails, getRecommendations}
 }
-export default MovieService;
+export default useMovieService;
 
 
 // "request_token": "38093ceeb15e8e9f1254b1c3d6325084c2a3c21e"

@@ -5,14 +5,14 @@
     display: grid;
     grid-gap: 5px;
     grid-template-columns: 10% 1fr 3fr 10%;
-    grid-template-rows: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
     grid-template-areas: " . title  .     ."
         ". poster player ."
         ". poster player ."
         ". poster player ."
         ". descr details."
-        ". descr details ."
         ". descr  details ."
+        ". carousel  carousel ."
 
     ;
 }
@@ -97,4 +97,8 @@
 .rate {
     margin: 20px 0 20px 0;
     font-weight: 700;
+}
+
+.carousel_rec {
+    grid-area: carousel;
 }

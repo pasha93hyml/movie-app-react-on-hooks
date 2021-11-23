@@ -14,11 +14,11 @@ const MovieCarousel = ({onMovieSelect}) => {
   const [carouselData, setCarouselData] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const movieService = new MovieService();
+  const {getConfiguration, getTopRatedMovies} = MovieService();
 
   useEffect(() => {
-    movieService.getConfiguration().then(({ base_url, poster_sizes }) => {
-      movieService.getTopRatedMovies().then((data) => {
+    getConfiguration().then(({ base_url, poster_sizes }) => {
+      getTopRatedMovies().then((data) => {
         const arr = data.map(item => {
           return {
             url: base_url.slice(0, -1) + "/" + poster_sizes[5] + item.poster_path,
@@ -37,10 +37,8 @@ const MovieCarousel = ({onMovieSelect}) => {
 
   const renderItems = (items) => {
     const markup = items.map((item, i) => (
-      <Link to={`/${item.id}`} key={i}>
-      <div className="item" onClick={() => {
-        onMovieSelect(item.id)
-        }}>
+      <Link to={`/movie/${item.id}`} key={i}>
+      <div className="item">
         <img src={item.url} alt="" height={300} />
       </div>
       </Link>
